@@ -1,0 +1,110 @@
+"use client"
+
+import { ChevronRight, type LucideIcon, Home, BarChart3, Users } from "lucide-react"
+
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
+import {
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
+} from "@/components/ui/sidebar"
+
+export function NavMain({
+  items,
+}: {
+  items: {
+    title: string
+    url: string
+    icon?: LucideIcon
+    isActive?: boolean
+    items?: {
+      title: string
+      url: string
+    }[]
+  }[]
+}) {
+  const defaultItems = [
+    {
+      title: "Dashboard",
+      url: "/dashboard",
+      icon: Home,
+      isActive: true,
+    },
+    {
+      title: "Relatórios",
+      url: "/reports",
+      icon: BarChart3,
+      items: [
+        {
+          title: "Análise Detalhada",
+          url: "/reports/detailed",
+        },
+        {
+          title: "Comparativo Temporal",
+          url: "/reports/temporal",
+        },
+        {
+          title: "Concorrência",
+          url: "/reports/competition",
+        },
+      ],
+    },
+    {
+      title: "Meu Negócio",
+      url: "/business",
+      icon: Users,
+      items: [
+        {
+          title: "Dados do Negócio",
+          url: "/business/data",
+        },
+        {
+          title: "Localização",
+          url: "/business/location",
+        },
+      ],
+    },
+  ]
+  return (
+    <SidebarGroup>
+      <SidebarGroupLabel>Navegação Principal</SidebarGroupLabel>
+      <SidebarMenu>
+        {defaultItems.map((item) => (
+          <Collapsible key={item.title} asChild defaultOpen={item.isActive} className="group/collapsible">
+            <SidebarMenuItem>
+              <CollapsibleTrigger asChild>
+                <SidebarMenuButton tooltip={item.title}>
+                  {item.icon && <item.icon />}
+                  <span>{item.title}</span>
+                  {item.items && (
+                    <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                  )}
+                </SidebarMenuButton>
+              </CollapsibleTrigger>
+              {item.items && (
+                <CollapsibleContent>
+                  <SidebarMenuSub>
+                    {item.items?.map((subItem) => (
+                      <SidebarMenuSubItem key={subItem.title}>
+                        <SidebarMenuSubButton asChild>
+                          <a href={subItem.url}>
+                            <span>{subItem.title}</span>
+                          </a>
+                        </SidebarMenuSubButton>
+                      </SidebarMenuSubItem>
+                    ))}
+                  </SidebarMenuSub>
+                </CollapsibleContent>
+              )}
+            </SidebarMenuItem>
+          </Collapsible>
+        ))}
+      </SidebarMenu>
+    </SidebarGroup>
+  )
+}
