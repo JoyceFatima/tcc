@@ -17,7 +17,6 @@ export function LandingHeader() {
           <span className="font-bold text-xl">Meu Negócio</span>
         </div>
 
-        {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-6">
           <a href="#features" className="text-sm font-medium hover:text-primary transition-colors">
             Recursos
@@ -30,7 +29,6 @@ export function LandingHeader() {
           </a>
         </nav>
 
-        {/* Desktop Buttons */}
         <div className="hidden md:flex items-center gap-2">
           <Button variant="ghost" asChild>
             <a href="/login">Entrar</a>
@@ -40,12 +38,10 @@ export function LandingHeader() {
           </Button>
         </div>
 
-        {/* Mobile Menu Button */}
         <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setIsMenuOpen(!isMenuOpen)}>
           <Menu className="h-5 w-5" />
         </Button>
 
-        {/* Mobile Menu */}
         {isMenuOpen && (
           <div className="absolute top-16 left-0 right-0 bg-white border-b shadow-lg md:hidden">
             <div className="container mx-auto px-4 py-4 space-y-4">

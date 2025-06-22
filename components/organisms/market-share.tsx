@@ -18,7 +18,6 @@ export function MarketShare() {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {/* Gráfico de barras simples */}
           <div className="space-y-3">
             {marketData.map((item, index) => (
               <div key={index}>
@@ -33,7 +32,6 @@ export function MarketShare() {
             ))}
           </div>
 
-          {/* Insights */}
           <div className="pt-4 border-t space-y-2">
             <h4 className="font-medium">Insights:</h4>
             <ul className="text-sm text-muted-foreground space-y-1">

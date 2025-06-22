@@ -36,7 +36,6 @@ export function RegisterForm() {
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-8">
-          {/* Dados Pessoais */}
           <div>
             <div className="flex items-center gap-2 mb-4">
               <User className="h-5 w-5 text-primary" />
@@ -128,7 +127,6 @@ export function RegisterForm() {
 
           <Separator />
 
-          {/* Dados do Negócio */}
           <div>
             <div className="flex items-center gap-2 mb-4">
               <Store className="h-5 w-5 text-primary" />

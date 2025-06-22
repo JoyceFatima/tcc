@@ -43,7 +43,6 @@ export function TemporalChart() {
       </CardHeader>
       <CardContent>
         <div className="space-y-6">
-          {/* Score Geral */}
           <div>
             <h4 className="font-medium mb-3">Score Geral de Localização</h4>
             <div className="grid grid-cols-12 gap-2">
@@ -62,7 +61,6 @@ export function TemporalChart() {
             </div>
           </div>
 
-          {/* Fluxo de Pessoas */}
           <div>
             <h4 className="font-medium mb-3">Fluxo de Pessoas (diário)</h4>
             <div className="grid grid-cols-12 gap-2">
@@ -81,7 +79,6 @@ export function TemporalChart() {
             </div>
           </div>
 
-          {/* Compatibilidade do Público */}
           <div>
             <h4 className="font-medium mb-3">Compatibilidade do Público-Alvo</h4>
             <div className="grid grid-cols-12 gap-2">

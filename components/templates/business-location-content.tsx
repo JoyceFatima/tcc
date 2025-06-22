@@ -15,10 +15,8 @@ export function BusinessLocationContent() {
 
         <LocationMap />
 
-        <div className="grid gap-6 md:grid-cols-2">
-          <LocationDetails />
-          <NearbyServices />
-        </div>
+        <LocationDetails />
+        <NearbyServices />
       </main>
     </div>
   )

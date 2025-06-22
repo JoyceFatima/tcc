@@ -28,68 +28,24 @@ export function NavMain({
     }[]
   }[]
 }) {
-  const defaultItems = [
-    {
-      title: "Dashboard",
-      url: "/dashboard",
-      icon: Home,
-      isActive: true,
-    },
-    {
-      title: "Relatórios",
-      url: "/reports",
-      icon: BarChart3,
-      items: [
-        {
-          title: "Análise Detalhada",
-          url: "/reports/detailed",
-        },
-        {
-          title: "Comparativo Temporal",
-          url: "/reports/temporal",
-        },
-        {
-          title: "Concorrência",
-          url: "/reports/competition",
-        },
-      ],
-    },
-    {
-      title: "Meu Negócio",
-      url: "/business",
-      icon: Users,
-      items: [
-        {
-          title: "Dados do Negócio",
-          url: "/business/data",
-        },
-        {
-          title: "Localização",
-          url: "/business/location",
-        },
-      ],
-    },
-  ]
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Navegação Principal</SidebarGroupLabel>
       <SidebarMenu>
-        {defaultItems.map((item) => (
-          <Collapsible key={item.title} asChild defaultOpen={item.isActive} className="group/collapsible">
-            <SidebarMenuItem>
-              <CollapsibleTrigger asChild>
-                <SidebarMenuButton tooltip={item.title}>
-                  {item.icon && <item.icon />}
-                  <span>{item.title}</span>
-                  {item.items && (
+        {items.map((item) =>
+          item.items && item.items.length > 0 ? (
+            <Collapsible key={item.title} asChild defaultOpen={item.isActive} className="group/collapsible">
+              <SidebarMenuItem>
+                <CollapsibleTrigger asChild>
+                  <SidebarMenuButton tooltip={item.title}>
+                    {item.icon && <item.icon />}
+                    <span>{item.title}</span>
                     <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-                  )}
-                </SidebarMenuButton>
-              </CollapsibleTrigger>
-              {item.items && (
+                  </SidebarMenuButton>
+                </CollapsibleTrigger>
                 <CollapsibleContent>
                   <SidebarMenuSub>
-                    {item.items?.map((subItem) => (
+                    {item.items.map((subItem) => (
                       <SidebarMenuSubItem key={subItem.title}>
                         <SidebarMenuSubButton asChild>
                           <a href={subItem.url}>
@@ -100,10 +56,19 @@ export function NavMain({
                     ))}
                   </SidebarMenuSub>
                 </CollapsibleContent>
-              )}
+              </SidebarMenuItem>
+            </Collapsible>
+          ) : (
+            <SidebarMenuItem key={item.title}>
+              <SidebarMenuButton asChild tooltip={item.title}>
+                <a href={item.url} className="flex items-center gap-2 w-full">
+                  {item.icon && <item.icon />}
+                  <span>{item.title}</span>
+                </a>
+              </SidebarMenuButton>
             </SidebarMenuItem>
-          </Collapsible>
-        ))}
+          )
+        )}
       </SidebarMenu>
     </SidebarGroup>
   )

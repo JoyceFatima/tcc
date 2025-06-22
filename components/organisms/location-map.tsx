@@ -16,7 +16,6 @@ export function LocationMap() {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {/* Placeholder para mapa */}
           <div className="h-64 bg-gray-100 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-300">
             <div className="text-center">
               <MapPin className="h-12 w-12 text-gray-400 mx-auto mb-2" />
@@ -25,7 +24,6 @@ export function LocationMap() {
             </div>
           </div>
 
-          {/* Pontos de interesse */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="flex items-center gap-3 p-3 border rounded-lg">
               <div className="w-3 h-3 bg-blue-500 rounded-full" />
@@ -52,7 +50,6 @@ export function LocationMap() {
             </div>
           </div>
 
-          {/* Ações rápidas */}
           <div className="flex gap-2">
             <Badge variant="outline" className="cursor-pointer hover:bg-gray-50">
               <Navigation className="h-3 w-3 mr-1" />

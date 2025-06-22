@@ -15,10 +15,8 @@ export function TemporalReportContent() {
 
         <TemporalChart />
 
-        <div className="grid gap-6 md:grid-cols-2">
-          <TrendAnalysis />
-          <SeasonalPatterns />
-        </div>
+        <TrendAnalysis />
+        <SeasonalPatterns />
       </main>
     </div>
   )

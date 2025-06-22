@@ -21,21 +21,22 @@ const data = {
       icon: Home,
     },
     {
-      title: "Analytics",
-      url: "/analytics",
+      title: "Relatórios",
+      url: "/reports",
       icon: BarChart3,
+      isActive: true,
       items: [
         {
-          title: "Análise de Local",
-          url: "/analytics/location",
+          title: "Análise Detalhada",
+          url: "/reports/detailed",
         },
         {
-          title: "Público-Alvo",
-          url: "/analytics/audience",
+          title: "Comparativo Temporal",
+          url: "/reports/temporal",
         },
         {
           title: "Concorrência",
-          url: "/analytics/competition",
+          url: "/reports/competition",
         },
       ],
     },

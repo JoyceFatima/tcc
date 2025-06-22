@@ -15,10 +15,8 @@ export function CompetitionReportContent() {
 
         <CompetitorMap />
 
-        <div className="grid gap-6 md:grid-cols-2">
-          <CompetitorAnalysis />
-          <MarketShare />
-        </div>
+        <CompetitorAnalysis />
+        <MarketShare />
       </main>
     </div>
   )
