@@ -1,25 +1,49 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { User, Mail, Phone, Edit } from "lucide-react"
+import { useAuth } from "@/contexts"
+import { userService } from "@/services"
 
 export function PersonalInfoCard() {
+  const { user, renewToken } = useAuth()
   const [isEditing, setIsEditing] = useState(false)
   const [userData, setUserData] = useState({
-    name: "João Silva",
-    email: "joao@meunegocio.com",
-    phone: "(11) 99999-9999",
+    name: user?.name || "",
+    email: user?.email || "",
+    phone: user?.phone || "",
     avatar: "/placeholder.svg?height=80&width=80",
   })
 
   const handleSave = () => {
-    setIsEditing(false)
+    userService
+      .updateMe({
+        name: userData.name,
+        email: userData.email,
+        phone: userData.phone,
+      })
+      .then(() => {
+        renewToken()
+      })
+      .finally(() => {
+        setIsEditing(false)
+      })
   }
+
+  useEffect(() => {
+    setUserData((prevData) => ({
+      ...prevData,
+      name: user?.name || prevData.name,
+      email: user?.email || prevData.email,
+      avatar: "/placeholder.svg?height=80&width=80",
+      phone: user?.phone || prevData.phone || "(11) 99999-9999",
+    }))
+  }, [user])
 
   return (
     <Card>
