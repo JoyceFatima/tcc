@@ -14,6 +14,10 @@ const defaultItems: MenuItem[] = [
     url: "/dashboard",
   },
   {
+    title: "Permissões",
+    url: "/roles",
+  },
+  {
     title: "Relatórios",
     url: "/reports",
     items: [

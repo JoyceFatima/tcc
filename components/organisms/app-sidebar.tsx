@@ -1,6 +1,6 @@
 "use client"
 
-import { Home, Users, BarChart3 } from "lucide-react"
+import { Home, Users, BarChart3, UserCog } from "lucide-react"
 
 import { NavMain } from "@/components/molecules/nav-main"
 import { NavUser } from "@/components/molecules/nav-user"
@@ -23,6 +23,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         title: "Dashboard",
         url: "/dashboard",
         icon: Home,
+      },
+      {
+        title: "Permissões",
+        url: "/roles",
+        icon: UserCog,
       },
       {
         title: "Relatórios",

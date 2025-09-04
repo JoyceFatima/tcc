@@ -92,8 +92,13 @@ export function LoginForm() {
             {isLoading ? "Entrando..." : "Entrar"}
           </Button>
         </form>
-
         <div className="mt-6 text-center">
+          <p className="text-sm mb-2 text-gray-600">
+            Esqueceu sua senha?{" "}
+            <a href="/forgot-password" className="text-blue-600 hover:underline font-medium">
+              Redefinir senha
+            </a>
+          </p>
           <p className="text-sm text-gray-600">
             Não tem uma conta?{" "}
             <a href="/register" className="text-blue-600 hover:underline font-medium">
