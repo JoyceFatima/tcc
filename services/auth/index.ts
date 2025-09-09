@@ -1,7 +1,7 @@
 import axios from "axios"
 import Cookies from "js-cookie"
 import service from "@/configs/service.config"
-import { AuthResponse, Data } from "./interface"
+import { AuthResponse, Data, IRegister } from "./interface"
 
 class AuthService {
   async login(email: string, password: string): Promise<Data> {
@@ -9,6 +9,10 @@ class AuthService {
     const { token } = response.data
     Cookies.set("token", token)
     return response.data
+  }
+
+  async register(data: IRegister): Promise<void> {
+    await service.post("/users", data).then((res) => res.data)
   }
 
   async renewToken(token: string): Promise<Data> {

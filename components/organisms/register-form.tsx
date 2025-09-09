@@ -1,8 +1,10 @@
 "use client"
 
 import type React from "react"
+import { useEffect, useState } from "react"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
 
-import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -12,19 +14,98 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Separator } from "@/components/ui/separator"
 import { User, Store, MapPin, Mail, Lock, Phone, Eye, EyeOff } from "lucide-react"
 
+import { useAuth } from "@/contexts"
+import { IRegister } from "@/services/auth/interface"
+import { IBusinessType } from "@/services/business-type/interface"
+import { ITargetAudience } from "@/services/target-audience/interface"
+import { targetAudienceService } from "@/services/target-audience"
+import { businessTypeService } from "@/services/business-type"
+
 export function RegisterForm() {
+  const { register } = useAuth()
+  const { push } = useRouter()
+
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
+  const [businessTypes, setBusinessTypes] = useState<IBusinessType[]>([])
+  const [targetAudiences, setTargetAudiences] = useState<ITargetAudience[]>([])
+
+  const [formData, setFormData] = useState<IRegister>({
+    user: {
+      email: "",
+      name: "",
+      lastName: "",
+      document: "",
+      phone: "",
+      password: "",
+    },
+    business: {
+      name: "",
+      description: "",
+      address: "",
+      budget: 0,
+      businessTypeId: "",
+      targetAudienceId: "",
+    },
+  })
+  const [confirmPassword, setConfirmPassword] = useState("")
+
+  const handleInputChange = (
+    section: "user" | "business",
+    field: keyof IRegister["user"] | keyof IRegister["business"],
+    value: string | number
+  ) => {
+    setFormData((prev) => ({
+      ...prev,
+      [section]: {
+        ...prev[section],
+        [field]: value,
+      },
+    }))
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setIsLoading(true)
 
-    setTimeout(() => {
-      window.location.href = "/dashboard"
-    }, 2000)
+    if (formData.user.password !== confirmPassword) {
+      setError("As senhas não coincidem. Por favor, verifique.")
+      return
+    }
+
+    setIsLoading(true)
+    setError(null)
+
+    try {
+      await register(formData)
+      push("/dashboard")
+    } catch (err) {
+      console.error("Erro no registro:", err)
+      setError("Ocorreu um erro ao criar a conta. Tente novamente mais tarde.")
+    } finally {
+      setIsLoading(false)
+    }
   }
+
+  useEffect(() => {
+    const getSelectsOptions = async () => {
+      try {
+        const [targetAudienceResult, businessTypeResult] = await Promise.all([
+          targetAudienceService.getAll(),
+          businessTypeService.getAll(),
+        ])
+        setTargetAudiences(targetAudienceResult)
+        setBusinessTypes(businessTypeResult)
+      } catch (err) {
+        console.error("Falha ao buscar opções de select:", err)
+        setError("Não foi possível carregar os dados do formulário.")
+      }
+    }
+
+    getSelectsOptions()
+  }, [])
 
   return (
     <Card className="w-full max-w-4xl mx-auto">
@@ -41,41 +122,60 @@ export function RegisterForm() {
               <User className="h-5 w-5 text-primary" />
               <h3 className="text-lg font-semibold">Dados Pessoais</h3>
             </div>
-
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="firstName">Nome</Label>
-                <Input id="firstName" placeholder="João" required />
+                <Input
+                  id="firstName"
+                  placeholder="Seu nome"
+                  value={formData.user.name}
+                  onChange={(e) => handleInputChange("user", "name", e.target.value)}
+                  required
+                />
               </div>
-
               <div className="space-y-2">
                 <Label htmlFor="lastName">Sobrenome</Label>
-                <Input id="lastName" placeholder="Silva" required />
+                <Input
+                  id="lastName"
+                  placeholder="Seu sobrenome"
+                  value={formData.user.lastName}
+                  onChange={(e) => handleInputChange("user", "lastName", e.target.value)}
+                  required
+                />
               </div>
-
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                  <Input id="email" type="email" placeholder="joao@email.com" className="pl-10" required />
-                </div>
+                <Label htmlFor="document">CPF</Label>
+                <Input
+                  id="document"
+                  placeholder="Seu CPF"
+                  value={formData.user.document}
+                  onChange={(e) => handleInputChange("user", "document", e.target.value)}
+                  required
+                />
               </div>
-
               <div className="space-y-2">
                 <Label htmlFor="phone">Telefone</Label>
                 <div className="relative">
-                  <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                  <Input id="phone" placeholder="(11) 99999-9999" className="pl-10" required />
+                  <Phone className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
+                  <Input
+                    id="phone"
+                    placeholder="(11) 99999-9999"
+                    value={formData.user.phone}
+                    onChange={(e) => handleInputChange("user", "phone", e.target.value)}
+                    className="pl-10"
+                    required
+                  />
                 </div>
               </div>
-
               <div className="space-y-2">
                 <Label htmlFor="password">Senha</Label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
                   <Input
                     id="password"
                     type={showPassword ? "text" : "password"}
+                    value={formData.user.password}
+                    onChange={(e) => handleInputChange("user", "password", e.target.value)}
                     placeholder="••••••••"
                     className="pl-10 pr-10"
                     required
@@ -83,26 +183,23 @@ export function RegisterForm() {
                   <Button
                     type="button"
                     variant="ghost"
-                    size="sm"
-                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                    size="icon"
+                    className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 hover:bg-transparent"
                     onClick={() => setShowPassword(!showPassword)}
                   >
-                    {showPassword ? (
-                      <EyeOff className="h-4 w-4 text-gray-400" />
-                    ) : (
-                      <Eye className="h-4 w-4 text-gray-400" />
-                    )}
+                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </Button>
                 </div>
               </div>
-
               <div className="space-y-2">
                 <Label htmlFor="confirmPassword">Confirmar Senha</Label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
                   <Input
                     id="confirmPassword"
                     type={showConfirmPassword ? "text" : "password"}
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
                     placeholder="••••••••"
                     className="pl-10 pr-10"
                     required
@@ -110,16 +207,27 @@ export function RegisterForm() {
                   <Button
                     type="button"
                     variant="ghost"
-                    size="sm"
-                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                    size="icon"
+                    className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 hover:bg-transparent"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   >
-                    {showConfirmPassword ? (
-                      <EyeOff className="h-4 w-4 text-gray-400" />
-                    ) : (
-                      <Eye className="h-4 w-4 text-gray-400" />
-                    )}
+                    {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </Button>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="seu@email.com"
+                    value={formData.user.email}
+                    onChange={(e) => handleInputChange("user", "email", e.target.value)}
+                    className="pl-10"
+                    required
+                  />
                 </div>
               </div>
             </div>
@@ -132,82 +240,98 @@ export function RegisterForm() {
               <Store className="h-5 w-5 text-primary" />
               <h3 className="text-lg font-semibold">Dados do Negócio</h3>
             </div>
-
             <div className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="businessName">Nome do Negócio</Label>
-                  <Input id="businessName" placeholder="Ex: Padaria do João" required />
+                  <Input
+                    id="businessName"
+                    placeholder="Ex: Padaria do João"
+                    value={formData.business.name}
+                    onChange={(e) => handleInputChange("business", "name", e.target.value)}
+                    required
+                  />
                 </div>
-
                 <div className="space-y-2">
                   <Label htmlFor="businessType">Tipo de Negócio</Label>
-                  <Select required>
+                  <Select
+                    required
+                    value={formData.business.businessTypeId}
+                    onValueChange={(value) => handleInputChange("business", "businessTypeId", value)}
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="Selecione o tipo" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="restaurant">Restaurante</SelectItem>
-                      <SelectItem value="retail">Varejo</SelectItem>
-                      <SelectItem value="service">Serviços</SelectItem>
-                      <SelectItem value="health">Saúde</SelectItem>
-                      <SelectItem value="beauty">Beleza</SelectItem>
-                      <SelectItem value="education">Educação</SelectItem>
-                      <SelectItem value="other">Outro</SelectItem>
+                      {businessTypes.map((type) => (
+                        <SelectItem key={type.id} value={type.id}>
+                          {type.name}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>
               </div>
-
               <div className="space-y-2">
                 <Label htmlFor="description">Descrição do Negócio</Label>
-                <Textarea id="description" placeholder="Descreva brevemente seu negócio e o que oferece..." rows={3} />
+                <Textarea
+                  id="description"
+                  value={formData.business.description}
+                  onChange={(e) => handleInputChange("business", "description", e.target.value)}
+                  placeholder="Descreva brevemente seu negócio e o que oferece..."
+                  rows={3}
+                />
               </div>
-
               <div className="space-y-2">
                 <Label htmlFor="address" className="flex items-center gap-2">
-                  <MapPin className="h-4 w-4" />
-                  Endereço Completo
+                  <MapPin className="h-4 w-4" /> Endereço Completo
                 </Label>
-                <Input id="address" placeholder="Rua, número, bairro, cidade, estado" required />
+                <Input
+                  id="address"
+                  value={formData.business.address}
+                  onChange={(e) => handleInputChange("business", "address", e.target.value)}
+                  placeholder="Rua, número, bairro, cidade, estado"
+                  required
+                />
               </div>
-
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="targetAudience">Público-Alvo Principal</Label>
-                  <Select required>
+                  <Select
+                    required
+                    value={formData.business.targetAudienceId}
+                    onValueChange={(value) => handleInputChange("business", "targetAudienceId", value)}
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="Selecione" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="young-adults">Jovens Adultos (18-30)</SelectItem>
-                      <SelectItem value="adults">Adultos (30-50)</SelectItem>
-                      <SelectItem value="seniors">Idosos (50+)</SelectItem>
-                      <SelectItem value="families">Famílias</SelectItem>
-                      <SelectItem value="professionals">Profissionais</SelectItem>
-                      <SelectItem value="students">Estudantes</SelectItem>
+                      {targetAudiences.map((audience) => (
+                        <SelectItem key={audience.id} value={audience.id}>
+                          {audience.name}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>
-
                 <div className="space-y-2">
-                  <Label htmlFor="budget">Faixa de Renda do Público</Label>
-                  <Select required>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecione" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="low">Baixa (até R$ 2.000)</SelectItem>
-                      <SelectItem value="medium-low">Média-Baixa (R$ 2.000 - R$ 4.000)</SelectItem>
-                      <SelectItem value="medium">Média (R$ 4.000 - R$ 8.000)</SelectItem>
-                      <SelectItem value="medium-high">Média-Alta (R$ 8.000 - R$ 15.000)</SelectItem>
-                      <SelectItem value="high">Alta (R$ 15.000+)</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <Label htmlFor="budget">Orçamento (R$)</Label>
+                  <Input
+                    id="budget"
+                    type="number"
+                    min={0}
+                    step={100}
+                    placeholder="Ex: 5000"
+                    value={formData.business.budget}
+                    onChange={(e) => handleInputChange("business", "budget", Number(e.target.value))}
+                    required
+                  />
                 </div>
               </div>
             </div>
           </div>
+
+          {error && <p className="text-sm text-red-600 text-center">{error}</p>}
 
           <Button type="submit" className="w-full" size="lg" disabled={isLoading}>
             {isLoading ? "Criando conta..." : "Começar Análise"}
@@ -215,10 +339,10 @@ export function RegisterForm() {
 
           <div className="text-center">
             <p className="text-sm text-gray-600">
-              Já tem uma conta?{" "}
-              <a href="/login" className="text-primary hover:underline font-medium">
+              Já tem uma conta?
+              <Link href="/login" className="text-primary hover:underline font-medium">
                 Fazer login
-              </a>
+              </Link>
             </p>
           </div>
         </form>

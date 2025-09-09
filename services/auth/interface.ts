@@ -19,3 +19,18 @@ export interface AuthResponse {
   data: Data
   statusCode: number
 }
+
+export interface Business {
+  id: string
+  name: string
+  description: string
+  address: string
+  budget: number
+  businessTypeId: string
+  targetAudienceId: string
+}
+
+export interface IRegister {
+  user: Partial<User & { password?: string }>
+  business: Partial<Business>
+}
