@@ -9,7 +9,6 @@ interface DashboardLayoutProps {
 export function DashboardLayout({ children }: DashboardLayoutProps) {
   return (
     <SidebarProvider>
-      <h1>teste</h1>
       <AppSidebar />
       <SidebarInset>{children}</SidebarInset>
     </SidebarProvider>
