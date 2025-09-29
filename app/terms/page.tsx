@@ -1,3 +1,11 @@
+/*
+Este arquivo é o componente da página de "Termos de Uso". Ele exibe um documento com os termos legais da aplicação, utilizando componentes de UI como `Card`, `CardHeader` e `CardContent` para estruturar o conteúdo de forma clara e organizada.
+
+A página começa com um link de "Voltar ao início" para facilitar a navegação. O conteúdo principal está dentro de um `Card`, que inclui um título (`CardTitle`), uma descrição com a data da última atualização (`CardDescription`) e as seções dos termos. Cada seção é separada por um componente `Separator`, contendo um título (`<h2>`) e um parágrafo (`<p>`) com texto de exemplo (lorem ipsum).
+
+O componente é uma página estática que apresenta informações importantes ao usuário de forma visualmente agradável e de fácil leitura.
+*/
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import Link from "next/link"

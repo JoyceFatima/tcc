@@ -1,3 +1,26 @@
+/*
+Este arquivo é um sistema completo de gerenciamento de "toasts" (notificações pop-up) para aplicações React.
+Ele utiliza o padrão de design Flux com um `reducer` para gerenciar o estado global das notificações,
+permitindo a criação, atualização, descarte e remoção de toasts de forma centralizada.
+
+A lógica central é construída em torno de:
+- `reducer`: Uma função pura que recebe o estado atual e uma ação, retornando um novo estado.
+  As ações suportadas incluem adicionar, atualizar, dispensar e remover toasts.
+- `memoryState` e `listeners`: O estado das notificações é mantido globalmente em `memoryState`, e os componentes
+  que usam o hook `useToast` se "inscrevem" a ele adicionando uma função `setState` aos `listeners`.
+- `dispatch`: Uma função que atualiza `memoryState` e notifica todos os listeners sobre a mudança,
+  gatilhando a re-renderização dos componentes.
+- `toast` e `useToast`: Funções públicas para interagir com o sistema. `toast()` cria e exibe uma nova
+  notificação e retorna métodos para controlá-la, enquanto `useToast()` fornece o estado atual de todas
+  as notificações e um método para dispensá-las.
+- `addToRemoveQueue`: Gerencia o tempo de vida das notificações, agendando a remoção automática após um atraso.
+
+O sistema é otimizado para a exibição de apenas um toast por vez (`TOAST_LIMIT = 1`), garantindo que a
+interface do usuário não seja sobrecarregada com múltiplas notificações. Ele é projetado para ser
+utilizado com a biblioteca `@/components/ui/toast`, mas a lógica central é independente do componente
+de UI específico.
+*/
+
 "use client"
 
 import * as React from "react"

@@ -1,3 +1,16 @@
+/*
+Este arquivo CSS define o estilo base para um site utilizando o framework Tailwind CSS.
+Ele importa as camadas principais do Tailwind e estabelece variáveis CSS personalizadas
+para uma paleta de cores temática, suportando os modos claro e escuro.
+*/
+
+/*
+Diretivas para importar as camadas pré-definidas do Tailwind:
+`@tailwind base`: Reseta e padroniza os elementos HTML básicos.
+`@tailwind components`: Fornece componentes pré-desenhados, como botões e cards.
+`@tailwind utilities`: Contém as classes utilitárias para espaçamento, cores, tipografia, etc.
+*/
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

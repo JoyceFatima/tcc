@@ -1,3 +1,13 @@
+/*
+Este arquivo define a classe `AuthService`, responsável por centralizar e gerenciar todas as operações de autenticação da aplicação, como login, registro e renovação de token. Ele utiliza a biblioteca `axios` (importada como `service`) para fazer requisições HTTP para a API de autenticação.
+
+- **`login(email, password)`**: Envia uma requisição POST para a rota `/auth/login` com as credenciais do usuário. Em caso de sucesso, o token de autenticação recebido é armazenado em um cookie usando a biblioteca `js-cookie`, garantindo que o usuário permaneça autenticado.
+- **`register(data)`**: Envia uma requisição POST para a rota `/users` com os dados do novo usuário para registro.
+- **`renewToken(token)`**: Envia uma requisição POST para `/auth/renew-token` para validar um token existente e obter um novo, mantendo a sessão do usuário ativa. O novo token também é salvo nos cookies.
+
+A exportação de uma instância da classe (`authService`) permite que outros módulos da aplicação importem e utilizem esses métodos de forma direta, mantendo o código de autenticação organizado e reutilizável.
+*/
+
 import axios from "axios"
 import Cookies from "js-cookie"
 import service from "@/configs/service.config"

@@ -1,3 +1,16 @@
+/*
+Este arquivo é um hook do React para o Next.js que gera dinamicamente os itens de um "breadcrumb"
+(navegação hierárquica) com base na URL atual. Ele usa uma lista de rotas predefinidas
+(`defaultItems`) para encontrar títulos amigáveis correspondentes aos segmentos da URL.
+
+O hook `useBreadcrumbItems` obtém o caminho da URL usando `usePathname`, o divide em segmentos,
+e itera sobre eles para construir a lista de breadcrumbs. Para cada segmento, ele tenta
+encontrar uma correspondência na lista `defaultItems` ou em seus subitens. Se uma correspondência
+for encontrada, o título definido é usado; caso contrário, o segmento da URL é capitalizado
+para ser usado como rótulo do breadcrumb. O resultado é um array de objetos, onde cada um
+contém o rótulo a ser exibido e a URL correspondente, criando a trilha de navegação.
+*/
+
 "use client"
 
 import { usePathname } from "next/navigation"
