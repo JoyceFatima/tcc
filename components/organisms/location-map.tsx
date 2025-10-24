@@ -1,10 +1,49 @@
 "use client"
 
+import { useEffect, useMemo, useState } from "react"
+import dynamic from "next/dynamic"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { MapPin, Navigation, Zap } from "lucide-react"
+import { useBusiness } from "@/contexts/business"
 
 export function LocationMap() {
+  const { business, isLoading: isBusinessLoading } = useBusiness()
+  const [position, setPosition] = useState<[number, number] | null>(null)
+  const [mapError, setMapError] = useState<string | null>(null)
+
+  const Map = useMemo(
+    () =>
+      dynamic(() => import("@/components/organisms/dynamic-map"), {
+        loading: () => <p>Carregando mapa...</p>,
+        ssr: false,
+      }),
+    []
+  )
+
+  useEffect(() => {
+    if (business?.address) {
+      const geocodeAddress = async () => {
+        try {
+          const response = await fetch(
+            `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(business.address)}`
+          )
+          const data = await response.json()
+          if (data && data.length > 0) {
+            setPosition([parseFloat(data[0].lat), parseFloat(data[0].lon)])
+            setMapError(null)
+          } else {
+            setMapError("Não foi possível encontrar o endereço no mapa.")
+          }
+        } catch (error) {
+          console.error("Geocoding error:", error)
+          setMapError("Erro ao carregar o mapa. Verifique sua conexão.")
+        }
+      }
+      geocodeAddress()
+    }
+  }, [business?.address])
+
   return (
     <Card className="col-span-full">
       <CardHeader>
@@ -16,12 +55,16 @@ export function LocationMap() {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          <div className="h-64 bg-gray-100 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-300">
-            <div className="text-center">
-              <MapPin className="h-12 w-12 text-gray-400 mx-auto mb-2" />
-              <p className="text-gray-500">Mapa Interativo</p>
-              <p className="text-sm text-gray-400">Rua das Flores, 123 - Centro, São Paulo - SP</p>
-            </div>
+          <div className="h-80 w-full rounded-lg border-2 border-dashed flex items-center justify-center bg-muted/40">
+            {isBusinessLoading ? (
+              <p>Carregando informações do negócio...</p>
+            ) : mapError ? (
+              <p className="text-destructive text-center">{mapError}</p>
+            ) : position ? (
+              <Map position={position} popupText={business?.name || "Sua localização"} />
+            ) : (
+              <p>Buscando localização no mapa...</p>
+            )}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -29,7 +72,7 @@ export function LocationMap() {
               <div className="w-3 h-3 bg-blue-500 rounded-full" />
               <div>
                 <h4 className="font-medium">Seu Negócio</h4>
-                <p className="text-sm text-muted-foreground">Padaria do João</p>
+                <p className="text-sm text-muted-foreground">{business?.name || "..."}</p>
               </div>
             </div>
 

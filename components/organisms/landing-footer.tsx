@@ -15,20 +15,6 @@ export function LandingFooter() {
             <p className="text-gray-400 mb-4 text-sm">
               Análise inteligente de localização para empreendedores que querem tomar decisões baseadas em dados.
             </p>
-            <div className="space-y-1 text-xs text-gray-400">
-              <div className="flex items-center gap-2">
-                <Mail className="h-4 w-4" />
-                <span>contato@meunegocio.com</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Phone className="h-4 w-4" />
-                <span>(11) 9999-9999</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <MapPin className="h-4 w-4" />
-                <span>São Paulo, SP</span>
-              </div>
-            </div>
           </div>
 
           <div className="flex-1 md:flex md:justify-end">

@@ -1,8 +1,5 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Plus } from "lucide-react"
 import type { ReactNode } from "react"
 import { Header } from "../organisms/header"
 
@@ -22,10 +19,6 @@ export function RolesManagementContent({ children, onCreateRole }: RolesManageme
               <h1 className="text-3xl font-bold">Gerenciamento de Roles</h1>
               <p className="text-muted-foreground mt-2">Gerencie as funções e permissões dos usuários</p>
             </div>
-            <Button onClick={onCreateRole}>
-              <Plus className="w-4 h-4 mr-2" />
-              Nova Role
-            </Button>
           </div>
 
           {children}

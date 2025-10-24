@@ -1,11 +1,9 @@
 import { Badge } from "@/components/ui/badge"
 
 interface RoleStatusBadgeProps {
-  status: "active" | "inactive"
+  status: boolean
 }
 
 export function RoleStatusBadge({ status }: RoleStatusBadgeProps) {
-  return (
-    <Badge variant={status === "active" ? "default" : "secondary"}>{status === "active" ? "Ativo" : "Inativo"}</Badge>
-  )
+  return <Badge variant={status ? "default" : "secondary"}>{status ? "Ativo" : "Inativo"}</Badge>
 }

@@ -1,12 +1,19 @@
 /*
 Este arquivo define as interfaces TypeScript para as estruturas de dados usadas na autenticação e registro de usuários. Ele atua como um "contrato" de dados, garantindo que as informações trocadas entre o frontend e o backend sigam um formato consistente.
 
+- `UserRole`: Representa a estrutura de uma role associada a um usuário.
 - `User`: Representa a estrutura completa de um usuário, incluindo informações pessoais, dados de contato e metadados de tempo.
 - `Data`: Agrupa o token de autenticação e os dados do usuário após um login bem-sucedido.
 - `AuthResponse`: Define a estrutura da resposta HTTP completa da API de autenticação, que inclui uma mensagem, os dados (`Data`) e o código de status.
 - `Business`: Descreve a estrutura para os dados de um negócio, como nome, endereço e orçamento.
 - `IRegister`: É a interface principal para o processo de registro, combinando partes opcionais das interfaces `User` (incluindo a senha) e `Business`. Isso permite que o sistema crie um novo usuário e associe-o a um negócio em uma única operação.
 */
+
+import { IRole } from "../roles/interface"
+
+export interface UserRole {
+  role: IRole
+}
 
 export interface User {
   id: string
@@ -18,7 +25,7 @@ export interface User {
   createdAt: string
   updatedAt: string
   deletedAt: null | string
-  userRoles: any[]
+  userRoles: UserRole[]
 }
 export interface Data {
   token: string

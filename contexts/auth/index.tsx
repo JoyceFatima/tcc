@@ -17,6 +17,7 @@ import { authService } from "@/services"
 import { IRegister, User } from "@/services/auth/interface"
 import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from "react"
 import Cookies from "js-cookie"
+import { BusinessProvider } from "../business"
 
 interface AuthContextType {
   user: User | null
@@ -52,7 +53,11 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, [])
 
   const value = useMemo(() => ({ user, login, renewToken, register }), [user])
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+  return (
+    <AuthContext.Provider value={value}>
+      <BusinessProvider>{children}</BusinessProvider>
+    </AuthContext.Provider>
+  )
 }
 
 export { AuthProvider }

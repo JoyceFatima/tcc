@@ -1,40 +1,22 @@
 import { TableCell, TableRow } from "@/components/ui/table"
 import { RoleStatusBadge } from "@/components/atoms/role-status-badge"
-import { PermissionsList } from "@/components/molecules/permissions-list"
-import { RoleActionsMenu } from "@/components/molecules/role-actions-menu"
-
-type Role = {
-  id: string
-  name: string
-  description: string
-  permissions: string[]
-  usersCount: number
-  createdAt: string
-  status: "active" | "inactive"
-}
+import type { IRole } from "@/services/roles/interface"
 
 interface RoleTableRowProps {
-  role: Role
-  onEdit: (role: Role) => void
-  onDelete: (role: Role) => void
+  role: IRole
 }
 
-export function RoleTableRow({ role, onEdit, onDelete }: RoleTableRowProps) {
+export function RoleTableRow({ role }: RoleTableRowProps) {
   return (
     <TableRow>
       <TableCell className="font-medium">{role.name}</TableCell>
-      <TableCell className="max-w-[200px] truncate">{role.description}</TableCell>
-      <TableCell>
-        <PermissionsList permissions={role.permissions} />
+      <TableCell className="max-w-[300px] truncate" title={role.description}>
+        {role.description}
       </TableCell>
-      <TableCell>{role.usersCount}</TableCell>
       <TableCell>
-        <RoleStatusBadge status={role.status} />
+        <RoleStatusBadge status={role.isActive} />
       </TableCell>
       <TableCell>{new Date(role.createdAt).toLocaleDateString("pt-BR")}</TableCell>
-      <TableCell>
-        <RoleActionsMenu onEdit={() => onEdit(role)} onDelete={() => onDelete(role)} />
-      </TableCell>
     </TableRow>
   )
 }
