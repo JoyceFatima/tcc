@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Store, MapPin, Edit } from "lucide-react"
 import { toast } from "sonner"
 import { useBusiness } from "@/contexts/business"
-import { IBusiness } from "@/services/business/interface"
+import { IBusiness, IAddress } from "@/services/business/interface"
 
 export function BusinessInfoEditCard() {
   const {
@@ -31,9 +31,51 @@ export function BusinessInfoEditCard() {
     setBusiness((prev) => (prev ? { ...prev, [field]: value } : null))
   }
 
-  const handleSave = async () => {
+  const handleAddressChange = (field: keyof IAddress, value: string) => {
+    if (!business) return
+    setBusiness((prev) => {
+      if (!prev) return null
+      
+      const currentAddress = typeof prev.address === 'string' 
+        ? { cep: '', street: '', number: '', neighborhood: '', city: '', state: '' }
+        : prev.address
+      
+      return {
+        ...prev,
+        address: {
+          ...currentAddress,
+          [field]: value,
+        },
+      }
+    })
+  }
+
+  const handleCepBlur = async (cep: string) => {
+    if (cep.length !== 8) return
+
     try {
-      await updateBusiness()
+      const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`)
+      const data = await response.json()
+
+      if (data.erro) {
+        toast.error("CEP não encontrado.")
+        return
+      }
+
+      handleAddressChange("street", data.logradouro)
+      handleAddressChange("neighborhood", data.bairro)
+      handleAddressChange("city", data.localidade)
+      handleAddressChange("state", data.uf)
+    } catch (error) {
+      toast.error("Erro ao buscar CEP.")
+    }
+  }
+
+  const handleSave = async () => {
+    if (!business) return
+
+    try {
+      await updateBusiness(business)
       setIsEditing(false)
     } catch (error) {
       // O toast de erro já é tratado no contexto
@@ -71,7 +113,6 @@ export function BusinessInfoEditCard() {
           <p className="text-red-600">{error}</p>
         ) : (
           <>
-            {" "}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="business-name">Nome do Negócio</Label>
@@ -113,18 +154,60 @@ export function BusinessInfoEditCard() {
                 rows={3}
               />
             </div>
-            <div>
-              <Label htmlFor="address" className="flex items-center gap-2">
+
+            {business.address && <div className="space-y-2">
+              <Label className="flex items-center gap-2">
                 <MapPin className="h-4 w-4" />
                 Endereço
               </Label>
-              <Input
-                id="address"
-                value={business.address}
-                onChange={(e) => handleInputChange("address", e.target.value)}
-                disabled={!isEditing}
-              />
-            </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <Input
+                  placeholder="CEP"
+                  value={(business.address as any).cep}
+                  onChange={(e) => handleAddressChange("cep", e.target.value)}
+                  onBlur={(e) => handleCepBlur(e.target.value)}
+                  disabled={!isEditing}
+                  maxLength={8}
+                />
+                <Input
+                  className="md:col-span-2"
+                  placeholder="Rua"
+                  value={(business.address as any).street}
+                  onChange={(e) => handleAddressChange("street", e.target.value)}
+                  disabled={!isEditing}
+                />
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <Input
+                  placeholder="Número"
+                  value={(business.address as any).number}
+                  onChange={(e) => handleAddressChange("number", e.target.value)}
+                  disabled={!isEditing}
+                />
+                <Input
+                  className="md:col-span-2"
+                  placeholder="Bairro"
+                  value={(business.address as any).neighborhood}
+                  onChange={(e) => handleAddressChange("neighborhood", e.target.value)}
+                  disabled={!isEditing}
+                />
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Input
+                  placeholder="Cidade"
+                  value={(business.address as any).city}
+                  onChange={(e) => handleAddressChange("city", e.target.value)}
+                  disabled={!isEditing}
+                />
+                <Input
+                  placeholder="Estado"
+                  value={(business.address as any).state}
+                  onChange={(e) => handleAddressChange("state", e.target.value)}
+                  disabled={!isEditing}
+                />
+              </div>
+            </div>}
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="target-audience">Público-Alvo</Label>

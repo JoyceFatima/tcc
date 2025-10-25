@@ -4,7 +4,7 @@ import { createContext, ReactNode, useContext, useEffect, useMemo, useState } fr
 import { toast } from "sonner"
 
 import { useAuth } from "@/contexts/auth"
-import { IBusiness } from "@/services/business/interface"
+import { IBusiness, IAddress } from "@/services/business/interface"
 import { IBusinessType } from "@/services/business-type/interface"
 import { ITargetAudience } from "@/services/target-audience/interface"
 import { businessService } from "@/services/business"
@@ -13,6 +13,32 @@ import { businessTypeService } from "@/services/business-type"
 import { IBusinessContext } from "./interface"
 
 const BusinessContext = createContext<IBusinessContext>({} as IBusinessContext)
+
+const emptyAddress: IAddress = {
+  street: '',
+  number: '',
+  neighborhood: '',
+  city: '',
+  state: '',
+  cep: '',
+};
+
+const parseAddress = (addressString: string): IAddress => {
+  if (!addressString) return emptyAddress;
+
+  const parts = addressString.match(/(.+), (\d+) - (.+), (.+) - (.+), (\d{8})/);
+  if (parts) {
+    return {
+      street: parts[1] || '',
+      number: parts[2] || '',
+      neighborhood: parts[3] || '',
+      city: parts[4] || '',
+      state: parts[5] || '',
+      cep: parts[6] || '',
+    };
+  }
+  return { ...emptyAddress, street: addressString };
+};
 
 const BusinessProvider = ({ children }: { children: ReactNode }) => {
   const { user } = useAuth()
@@ -38,6 +64,13 @@ const BusinessProvider = ({ children }: { children: ReactNode }) => {
         businessTypeService.getAll(),
       ])
 
+      if (businessData) {
+        businessData.address = parseAddress(businessData.address as string);
+      } else {
+        // Initialize with empty address if no business data
+        setBusiness({ address: emptyAddress } as IBusiness);
+      }
+
       setBusiness(businessData)
       setOriginalBusiness(businessData)
       setTargetAudiences(targetAudienceResult)
@@ -52,13 +85,17 @@ const BusinessProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
-  const updateBusiness = async () => {
-    if (!business) return
+  const updateBusiness = async (updatedBusiness: IBusiness) => {
+    if (!updatedBusiness) return
 
     setIsSaving(true)
     try {
-      await businessService.update(business.id, business)
-      setOriginalBusiness(business)
+      const { street, number, neighborhood, city, state, cep } = updatedBusiness.address as IAddress;
+      const fullAddress = `${street}, ${number} - ${neighborhood}, ${city} - ${state}, ${cep}`;
+      const businessToSave = { ...updatedBusiness, address: fullAddress };
+
+      await businessService.update(businessToSave.id, businessToSave)
+      setOriginalBusiness(updatedBusiness)
       toast.success("Informações do negócio salvas com sucesso!")
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Ocorreu um erro desconhecido.")

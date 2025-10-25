@@ -24,16 +24,18 @@ export function LocationMap() {
   useEffect(() => {
     if (business?.address) {
       const geocodeAddress = async () => {
+        console.log("Geocoding address:", business.address);
         try {
           const response = await fetch(
             `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(business.address)}`
           )
           const data = await response.json()
+          console.log("Geocoding response:", data);
           if (data && data.length > 0) {
             setPosition([parseFloat(data[0].lat), parseFloat(data[0].lon)])
             setMapError(null)
           } else {
-            setMapError("Não foi possível encontrar o endereço no mapa.")
+            setMapError("Não foi possível encontrar o endereço no mapa. Tente ser mais específico, incluindo cidade, estado e CEP.")
           }
         } catch (error) {
           console.error("Geocoding error:", error)

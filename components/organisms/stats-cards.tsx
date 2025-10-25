@@ -1,29 +1,29 @@
 import { StatCard } from "@/components/atoms/stat-card"
 import { TrendingUp, Users, Target, MapPin } from "lucide-react"
 
-export function StatsCards() {
-  const stats = [
+export function StatsCards({ stats }) {
+  const statsData = [
     {
       title: "Score de Localização",
-      value: "76%",
-      description: "+5% desde o último mês",
+      value: `${stats.locationScore}%`,
+      description: `${stats.locationScoreChange}% desde o último mês`,
       icon: TrendingUp,
     },
     {
       title: "Fluxo Diário",
-      value: "2,847",
+      value: stats.dailyFootfall,
       description: "pessoas passam pelo local",
       icon: Users,
     },
     {
       title: "Compatibilidade",
-      value: "78%",
+      value: `${stats.targetAudienceCompatibility}%`,
       description: "do público é seu target",
       icon: Target,
     },
     {
       title: "Concorrentes",
-      value: "3",
+      value: stats.competitors,
       description: "num raio de 500m",
       icon: MapPin,
     },
@@ -31,7 +31,7 @@ export function StatsCards() {
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-      {stats.map((stat, index) => (
+      {statsData.map((stat, index) => (
         <StatCard key={index} {...stat} />
       ))}
     </div>

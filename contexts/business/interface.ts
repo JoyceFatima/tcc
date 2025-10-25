@@ -13,5 +13,5 @@ export interface IBusinessContext {
   error: string | null
   setBusiness: Dispatch<SetStateAction<IBusiness | null>>
   fetchBusiness: () => Promise<void>
-  updateBusiness: () => Promise<void>
+  updateBusiness: (business: IBusiness) => Promise<void>
 }
