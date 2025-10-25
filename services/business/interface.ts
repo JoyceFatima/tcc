@@ -1,9 +1,18 @@
+export interface IAddress {
+  cep: string;
+  street: string;
+  number: string;
+  neighborhood: string;
+  city: string;
+  state: string;
+}
+
 export interface IBusiness {
   id: string
   name: string
   businessTypeId: string
   description: string
-  address: string
+  address: IAddress | string;
   targetAudienceId: string
   budget: number
 }
