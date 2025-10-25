@@ -18,6 +18,7 @@ class AuthService {
     const response = await service.post<AuthResponse>("/auth/login", { email, password }).then((res) => res.data)
     const { token } = response.data
     Cookies.set("token", token)
+    console.log(response)
     return response.data
   }
 
