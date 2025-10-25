@@ -1,23 +1,51 @@
-'use client'
-import { useDashboard } from "@/contexts/dashboard";
-import { useBusiness } from "@/contexts/business";
+"use client"
+import { useDashboard } from "@/contexts/dashboard"
+import { useBusiness } from "@/contexts/business"
 import { Header } from "@/components/organisms/header"
 import { StatsCards } from "@/components/organisms/stats-cards"
 import { LocationAnalysisChart } from "@/components/molecules/location-analysis-chart"
 import { InsightsCard } from "@/components/molecules/insights-card"
 import { BusinessInfoCard } from "@/components/molecules/business-info-card"
-import { Button } from '@/components/ui/button';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Button } from "@/components/ui/button"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { Skeleton } from "@/components/ui/skeleton"
+
+function MainContentLoading() {
+  return (
+    <div className="flex flex-1 flex-col">
+      <Header />
+      <main className="flex-1 space-y-6 p-6">
+        <div className="flex justify-between items-center">
+          <div className="space-y-2">
+            <Skeleton className="h-8 w-48" />
+            <Skeleton className="h-4 w-96" />
+          </div>
+          <Skeleton className="h-10 w-40" />
+        </div>
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+          <Skeleton className="h-32" />
+          <Skeleton className="h-32" />
+          <Skeleton className="h-32" />
+          <Skeleton className="h-32" />
+        </div>
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
+          <Skeleton className="h-80 lg:col-span-5" />
+          <Skeleton className="h-80 lg:col-span-2" />
+        </div>
+      </main>
+    </div>
+  )
+}
 
 export function MainContent() {
-  const { dashboard, isLoading, generateDashboard } = useDashboard();
-  const { business } = useBusiness();
+  const { dashboard, isLoading, generateDashboard } = useDashboard()
+  const { business } = useBusiness()
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <MainContentLoading />
   }
 
-  const isButtonDisabled = isLoading || !business?.id;
+  const isButtonDisabled = isLoading || !business?.id
 
   return (
     <div className="flex flex-1 flex-col">
@@ -35,7 +63,7 @@ export function MainContent() {
               <TooltipTrigger asChild>
                 <div>
                   <Button onClick={() => generateDashboard()} disabled={isButtonDisabled}>
-                    {isLoading ? 'Gerando...' : 'Gerar Análise com IA'}
+                    {isLoading ? "Gerando..." : "Gerar Análise com IA"}
                   </Button>
                 </div>
               </TooltipTrigger>
