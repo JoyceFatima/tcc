@@ -93,7 +93,7 @@ export function BusinessInfoEditCard() {
         <CardTitle className="flex items-center justify-between">
           <span className="flex items-center gap-2">
             <Store className="h-5 w-5" />
-            Dados do Negócio
+            Metas do Negócio
           </span>
           <Button
             variant={isEditing ? "ghost" : "outline"}
@@ -127,7 +127,7 @@ export function BusinessInfoEditCard() {
               <div>
                 <Label htmlFor="business-type">Tipo de Negócio</Label>
                 <Select
-                  value={business.businessTypeId}
+                  value={business.businessTypeId || ""}
                   onValueChange={(value) => handleInputChange("businessTypeId", value)}
                   disabled={!isEditing}
                 >
@@ -135,7 +135,7 @@ export function BusinessInfoEditCard() {
                     <SelectValue placeholder="Selecione o tipo" />
                   </SelectTrigger>
                   <SelectContent>
-                    {businessTypes.map((type) => (
+                    {businessTypes.filter(type => type.id).map((type) => (
                       <SelectItem key={type.id} value={type.id}>
                         {type.name}
                       </SelectItem>
@@ -212,7 +212,7 @@ export function BusinessInfoEditCard() {
               <div>
                 <Label htmlFor="target-audience">Público-Alvo</Label>
                 <Select
-                  value={business.targetAudienceId}
+                  value={business.targetAudienceId || ""}
                   onValueChange={(value) => handleInputChange("targetAudienceId", value)}
                   disabled={!isEditing}
                 >
@@ -220,7 +220,7 @@ export function BusinessInfoEditCard() {
                     <SelectValue placeholder="Selecione" />
                   </SelectTrigger>
                   <SelectContent>
-                    {targetAudiences.map((audience) => (
+                    {targetAudiences.filter(audience => audience.id).map((audience) => (
                       <SelectItem key={audience.id} value={audience.id}>
                         {audience.name}
                       </SelectItem>

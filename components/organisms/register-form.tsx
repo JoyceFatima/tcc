@@ -254,22 +254,24 @@ export function RegisterForm() {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="businessType">Tipo de Negócio</Label>
-                  <Select
-                    required
-                    value={formData.business.businessTypeId}
-                    onValueChange={(value) => handleInputChange("business", "businessTypeId", value)}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecione o tipo" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {businessTypes.map((type) => (
-                        <SelectItem key={type.id} value={type.id}>
-                          {type.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  {businessTypes.length > 0 && (
+                    <Select
+                      required
+                      value={formData.business.businessTypeId}
+                      onValueChange={(value) => handleInputChange("business", "businessTypeId", value)}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecione o tipo" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {businessTypes.map((type) => (
+                          <SelectItem key={type.id} value={type.id}>
+                            {type.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
                 </div>
               </div>
               <div className="space-y-2">
@@ -297,22 +299,24 @@ export function RegisterForm() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="targetAudience">Público-Alvo Principal</Label>
-                  <Select
-                    required
-                    value={formData.business.targetAudienceId}
-                    onValueChange={(value) => handleInputChange("business", "targetAudienceId", value)}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecione" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {targetAudiences.map((audience) => (
-                        <SelectItem key={audience.id} value={audience.id}>
-                          {audience.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  {targetAudiences.length > 0 && (
+                    <Select
+                      required
+                      value={formData.business.targetAudienceId}
+                      onValueChange={(value) => handleInputChange("business", "targetAudienceId", value)}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecione" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {targetAudiences.map((audience) => (
+                          <SelectItem key={audience.id} value={audience.id}>
+                            {audience.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="budget">Orçamento (R$)</Label>

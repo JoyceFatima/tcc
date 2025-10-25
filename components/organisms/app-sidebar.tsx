@@ -55,8 +55,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         icon: Users,
         items: [
           {
-            title: "Dados do Negócio",
-            url: "/business/data",
+            title: "Metas do Negócio",
+            url: "/business/goals",
           },
           {
             title: "Localização",

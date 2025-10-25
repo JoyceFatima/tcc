@@ -43,7 +43,7 @@ const defaultItems: MenuItem[] = [
     title: "Meu Negócio",
     url: "/business",
     items: [
-      { title: "Dados do Negócio", url: "/business/data" },
+      { title: "Metas do Negócio", url: "/business/data" },
       { title: "Localização", url: "/business/location" },
     ],
   },
