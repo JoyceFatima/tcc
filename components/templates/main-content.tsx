@@ -1,6 +1,6 @@
 "use client"
 import { useDashboard } from "@/contexts/dashboard"
-import { usePdfDownloader } from "@/hooks/usePdfDownloader"
+import { useExcelDownloader } from "@/hooks/useExcelDownloader"
 import { useBusiness } from "@/contexts/business"
 import { Header } from "@/components/organisms/header"
 import { StatsCards } from "@/components/organisms/stats-cards"
@@ -41,10 +41,14 @@ function MainContentLoading() {
 
 export function MainContent() {
   const { dashboard, isLoading, generateDashboard } = useDashboard()
-  const { business } = useBusiness()
-  const { isDownloading, download: downloadPdf } = usePdfDownloader({
-    elementId: "dashboard-content",
-    fileName: "dashboard-relatorio.pdf",
+  const { business, businessTypes, targetAudiences } = useBusiness()
+  const { isDownloading, download: downloadExcel } = useExcelDownloader({
+    dashboardData: dashboard,
+    businessData: business,
+    fileName: "dashboard-relatorio.xlsx",
+    // Passando as listas para o hook
+    businessTypes,
+    targetAudiences,
   })
 
   if (isLoading) {
@@ -65,9 +69,9 @@ export function MainContent() {
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <Button onClick={downloadPdf} disabled={!dashboard || isDownloading} variant="outline">
+            <Button onClick={downloadExcel} disabled={!dashboard || isDownloading} variant="outline">
               <Download className="mr-2 h-4 w-4" />
-              {isDownloading ? "Baixando..." : "Baixar Relatório PDF"}
+              {isDownloading ? "Baixando..." : "Baixar Excel"}
             </Button>
             <TooltipProvider>
               <Tooltip>
