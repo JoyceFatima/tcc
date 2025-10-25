@@ -1,7 +1,5 @@
 import { Header } from "@/components/organisms/header"
 import { LocationMap } from "@/components/organisms/location-map"
-import { LocationDetails } from "@/components/organisms/location-details"
-import { NearbyServices } from "@/components/organisms/nearby-services"
 
 export function BusinessLocationContent() {
   return (
@@ -14,9 +12,6 @@ export function BusinessLocationContent() {
         </div>
 
         <LocationMap />
-
-        <LocationDetails />
-        <NearbyServices />
       </main>
     </div>
   )

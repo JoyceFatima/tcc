@@ -29,26 +29,26 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         url: "/roles",
         icon: UserCog,
       },
-      {
-        title: "Relatórios",
-        url: "/reports",
-        icon: BarChart3,
-        isActive: true,
-        items: [
-          {
-            title: "Análise Detalhada",
-            url: "/reports/detailed",
-          },
-          {
-            title: "Comparativo Temporal",
-            url: "/reports/temporal",
-          },
-          {
-            title: "Concorrência",
-            url: "/reports/competition",
-          },
-        ],
-      },
+      //   {
+      //     title: "Relatórios",
+      //     url: "/reports",
+      //     icon: BarChart3,
+      //     isActive: true,
+      //     items: [
+      //       {
+      //         title: "Análise Detalhada",
+      //         url: "/reports/detailed",
+      //       },
+      //       {
+      //         title: "Comparativo Temporal",
+      //         url: "/reports/temporal",
+      //       },
+      //       {
+      //         title: "Concorrência",
+      //         url: "/reports/competition",
+      //       },
+      //     ],
+      //   },
       {
         title: "Meu Negócio",
         url: "/business",

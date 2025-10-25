@@ -1,5 +1,6 @@
 "use client"
 import { useDashboard } from "@/contexts/dashboard"
+import { usePdfDownloader } from "@/hooks/usePdfDownloader"
 import { useBusiness } from "@/contexts/business"
 import { Header } from "@/components/organisms/header"
 import { StatsCards } from "@/components/organisms/stats-cards"
@@ -9,6 +10,7 @@ import { BusinessInfoCard } from "@/components/molecules/business-info-card"
 import { Button } from "@/components/ui/button"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { Skeleton } from "@/components/ui/skeleton"
+import { Download } from "lucide-react"
 
 function MainContentLoading() {
   return (
@@ -40,6 +42,10 @@ function MainContentLoading() {
 export function MainContent() {
   const { dashboard, isLoading, generateDashboard } = useDashboard()
   const { business } = useBusiness()
+  const { isDownloading, download: downloadPdf } = usePdfDownloader({
+    elementId: "dashboard-content",
+    fileName: "dashboard-relatorio.pdf",
+  })
 
   if (isLoading) {
     return <MainContentLoading />
@@ -50,7 +56,7 @@ export function MainContent() {
   return (
     <div className="flex flex-1 flex-col">
       <Header />
-      <main className="flex-1 space-y-6 p-6">
+      <main id="dashboard-content" className="flex-1 space-y-6 p-6">
         <div className="flex justify-between items-center">
           <div className="space-y-2">
             <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
@@ -58,22 +64,28 @@ export function MainContent() {
               Análise completa da localização do seu negócio e insights para otimização
             </p>
           </div>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <div>
-                  <Button onClick={() => generateDashboard()} disabled={isButtonDisabled}>
-                    {isLoading ? "Gerando..." : "Gerar Análise com IA"}
-                  </Button>
-                </div>
-              </TooltipTrigger>
-              {isButtonDisabled && (
-                <TooltipContent>
-                  <p>Você precisa ter um negócio cadastrado para gerar uma análise.</p>
-                </TooltipContent>
-              )}
-            </Tooltip>
-          </TooltipProvider>
+          <div className="flex items-center gap-2">
+            <Button onClick={downloadPdf} disabled={!dashboard || isDownloading} variant="outline">
+              <Download className="mr-2 h-4 w-4" />
+              {isDownloading ? "Baixando..." : "Baixar Relatório PDF"}
+            </Button>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div>
+                    <Button onClick={() => generateDashboard()} disabled={isButtonDisabled}>
+                      {isLoading ? "Gerando..." : "Gerar Análise com IA"}
+                    </Button>
+                  </div>
+                </TooltipTrigger>
+                {isButtonDisabled && !isLoading && (
+                  <TooltipContent>
+                    <p>Você precisa ter um negócio cadastrado para gerar uma análise.</p>
+                  </TooltipContent>
+                )}
+              </Tooltip>
+            </TooltipProvider>
+          </div>
         </div>
 
         {dashboard && (

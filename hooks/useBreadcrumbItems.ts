@@ -30,15 +30,15 @@ const defaultItems: MenuItem[] = [
     title: "Permissões",
     url: "/roles",
   },
-  {
-    title: "Relatórios",
-    url: "/reports",
-    items: [
-      { title: "Análise Detalhada", url: "/reports/detailed" },
-      { title: "Comparativo Temporal", url: "/reports/temporal" },
-      { title: "Concorrência", url: "/reports/competition" },
-    ],
-  },
+  //   {
+  //     title: "Relatórios",
+  //     url: "/reports",
+  //     items: [
+  //       { title: "Análise Detalhada", url: "/reports/detailed" },
+  //       { title: "Comparativo Temporal", url: "/reports/temporal" },
+  //       { title: "Concorrência", url: "/reports/competition" },
+  //     ],
+  //   },
   {
     title: "Meu Negócio",
     url: "/business",
