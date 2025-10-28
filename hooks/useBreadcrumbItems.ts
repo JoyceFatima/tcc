@@ -40,8 +40,8 @@ const defaultItems: MenuItem[] = [
   //     ],
   //   },
   {
-    title: "Meu Negócio",
-    url: "/business",
+    title: "My Business",
+    url: "/dashboard",
     items: [
       { title: "Metas do Negócio", url: "/business/data" },
       { title: "Localização", url: "/business/location" },

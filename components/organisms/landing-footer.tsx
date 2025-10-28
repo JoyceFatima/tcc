@@ -10,7 +10,7 @@ export function LandingFooter() {
               <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
                 <Store className="size-4" />
               </div>
-              <span className="font-bold text-xl">Meu Negócio</span>
+              <span className="font-bold text-xl">My Business</span>
             </div>
             <p className="text-gray-400 mb-4 text-sm">
               Análise inteligente de localização para empreendedores que querem tomar decisões baseadas em dados.
@@ -41,7 +41,7 @@ export function LandingFooter() {
           </div>
         </div>
         <div className="border-t border-gray-800 mt-8 pt-6 text-center text-xs text-gray-400">
-          &copy; 2025 Meu Negócio. Todos os direitos reservados.
+          &copy; 2025 My Business. Todos os direitos reservados.
         </div>
       </div>
     </footer>

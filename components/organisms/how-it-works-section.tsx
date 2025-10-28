@@ -1,4 +1,3 @@
-import { Badge } from "@/components/ui/badge"
 import { UserPlus, MapPin, BarChart3 } from "lucide-react"
 
 export function HowItWorksSection() {

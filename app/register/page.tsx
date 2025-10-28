@@ -4,7 +4,7 @@ import { RegisterForm } from "@/components/organisms/register-form"
 export default function RegisterPage() {
   return (
     <RegisterLayout
-      title="Cadastre-se no Meu Negócio"
+      title="Cadastre-se no My Business"
       subtitle="Crie sua conta para começar a analisar a localização do seu negócio"
     >
       <RegisterForm />

@@ -50,7 +50,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       //     ],
       //   },
       {
-        title: "Meu Negócio",
+        title: "My Business",
         url: "/business",
         icon: Users,
         items: [

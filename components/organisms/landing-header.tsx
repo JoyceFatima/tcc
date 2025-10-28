@@ -14,7 +14,7 @@ export function LandingHeader() {
           <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
             <Store className="size-4" />
           </div>
-          <span className="font-bold text-xl">Meu Negócio</span>
+          <span className="font-bold text-xl">My Business</span>
         </div>
 
         <nav className="hidden md:flex items-center gap-6">
@@ -24,8 +24,8 @@ export function LandingHeader() {
           <a href="#how-it-works" className="text-sm font-medium hover:text-primary transition-colors">
             Como Funciona
           </a>
-          <a href="#examples" className="text-sm font-medium hover:text-primary transition-colors">
-            Exemplos
+          <a href="#pricing" className="text-sm font-medium hover:text-primary transition-colors">
+            Planos
           </a>
         </nav>
 

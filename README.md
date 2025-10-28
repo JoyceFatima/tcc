@@ -1,4 +1,4 @@
-# Meu Negócio - Dashboard de Análise de Localização
+# My Business - Dashboard de Análise de Localização
 
 Uma aplicação Next.js para análise inteligente de localização de negócios.
 
@@ -13,16 +13,21 @@ Uma aplicação Next.js para análise inteligente de localização de negócios.
 ## 📦 Instalação
 
 \`\`\`bash
+
 # Instalar dependências
+
 npm install
 
 # Executar em desenvolvimento
+
 npm run dev
 
 # Build para produção
+
 npm run build
 
 # Executar em produção
+
 npm start
 \`\`\`
 
@@ -40,16 +45,16 @@ npm start
 ## 📁 Estrutura do Projeto
 
 \`\`\`
-├── app/                    # App Router (Next.js 15)
+├── app/ # App Router (Next.js 15)
 ├── components/
-│   ├── atoms/             # Componentes básicos
-│   ├── molecules/         # Componentes compostos
-│   ├── organisms/         # Componentes complexos
-│   ├── templates/         # Templates de layout
-│   ├── pages/            # Páginas completas
-│   └── ui/               # Componentes shadcn/ui
-├── lib/                   # Utilitários
-└── public/               # Arquivos estáticos
+│ ├── atoms/ # Componentes básicos
+│ ├── molecules/ # Componentes compostos
+│ ├── organisms/ # Componentes complexos
+│ ├── templates/ # Templates de layout
+│ ├── pages/ # Páginas completas
+│ └── ui/ # Componentes shadcn/ui
+├── lib/ # Utilitários
+└── public/ # Arquivos estáticos
 \`\`\`
 
 ## 🎯 Funcionalidades
@@ -84,6 +89,7 @@ O projeto está configurado com:
 ## 🎨 Design System
 
 Baseado no shadcn/ui com:
+
 - Atomic Design (atoms, molecules, organisms)
 - Componentes reutilizáveis
 - Tema consistente
