@@ -35,11 +35,12 @@ export function BusinessInfoEditCard() {
     if (!business) return
     setBusiness((prev) => {
       if (!prev) return null
-      
-      const currentAddress = typeof prev.address === 'string' 
-        ? { cep: '', street: '', number: '', neighborhood: '', city: '', state: '' }
-        : prev.address
-      
+
+      const currentAddress =
+        typeof prev.address === "string"
+          ? { cep: "", street: "", number: "", neighborhood: "", city: "", state: "" }
+          : prev.address
+
       return {
         ...prev,
         address: {
@@ -135,11 +136,13 @@ export function BusinessInfoEditCard() {
                     <SelectValue placeholder="Selecione o tipo" />
                   </SelectTrigger>
                   <SelectContent>
-                    {businessTypes.filter(type => type.id).map((type) => (
-                      <SelectItem key={type.id} value={type.id}>
-                        {type.name}
-                      </SelectItem>
-                    ))}
+                    {businessTypes
+                      .filter((type) => type.id)
+                      .map((type) => (
+                        <SelectItem key={type.id} value={type.id}>
+                          {type.name}
+                        </SelectItem>
+                      ))}
                   </SelectContent>
                 </Select>
               </div>
@@ -155,58 +158,60 @@ export function BusinessInfoEditCard() {
               />
             </div>
 
-            {business.address && <div className="space-y-2">
-              <Label className="flex items-center gap-2">
-                <MapPin className="h-4 w-4" />
-                Endereço
-              </Label>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <Input
-                  placeholder="CEP"
-                  value={(business.address as any).cep}
-                  onChange={(e) => handleAddressChange("cep", e.target.value)}
-                  onBlur={(e) => handleCepBlur(e.target.value)}
-                  disabled={!isEditing}
-                  maxLength={8}
-                />
-                <Input
-                  className="md:col-span-2"
-                  placeholder="Rua"
-                  value={(business.address as any).street}
-                  onChange={(e) => handleAddressChange("street", e.target.value)}
-                  disabled={!isEditing}
-                />
+            {business.address && (
+              <div className="space-y-2">
+                <Label className="flex items-center gap-2">
+                  <MapPin className="h-4 w-4" />
+                  Endereço
+                </Label>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <Input
+                    placeholder="CEP"
+                    value={(business.address as any).cep}
+                    onChange={(e) => handleAddressChange("cep", e.target.value)}
+                    onBlur={(e) => handleCepBlur(e.target.value)}
+                    disabled={!isEditing}
+                    maxLength={8}
+                  />
+                  <Input
+                    className="md:col-span-2"
+                    placeholder="Rua"
+                    value={(business.address as any).street}
+                    onChange={(e) => handleAddressChange("street", e.target.value)}
+                    disabled={!isEditing}
+                  />
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <Input
+                    placeholder="Número"
+                    value={(business.address as any).number}
+                    onChange={(e) => handleAddressChange("number", e.target.value)}
+                    disabled={!isEditing}
+                  />
+                  <Input
+                    className="md:col-span-2"
+                    placeholder="Bairro"
+                    value={(business.address as any).neighborhood}
+                    onChange={(e) => handleAddressChange("neighborhood", e.target.value)}
+                    disabled={!isEditing}
+                  />
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <Input
+                    placeholder="Cidade"
+                    value={(business.address as any).city}
+                    onChange={(e) => handleAddressChange("city", e.target.value)}
+                    disabled={!isEditing}
+                  />
+                  <Input
+                    placeholder="Estado"
+                    value={(business.address as any).state}
+                    onChange={(e) => handleAddressChange("state", e.target.value)}
+                    disabled={!isEditing}
+                  />
+                </div>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <Input
-                  placeholder="Número"
-                  value={(business.address as any).number}
-                  onChange={(e) => handleAddressChange("number", e.target.value)}
-                  disabled={!isEditing}
-                />
-                <Input
-                  className="md:col-span-2"
-                  placeholder="Bairro"
-                  value={(business.address as any).neighborhood}
-                  onChange={(e) => handleAddressChange("neighborhood", e.target.value)}
-                  disabled={!isEditing}
-                />
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Input
-                  placeholder="Cidade"
-                  value={(business.address as any).city}
-                  onChange={(e) => handleAddressChange("city", e.target.value)}
-                  disabled={!isEditing}
-                />
-                <Input
-                  placeholder="Estado"
-                  value={(business.address as any).state}
-                  onChange={(e) => handleAddressChange("state", e.target.value)}
-                  disabled={!isEditing}
-                />
-              </div>
-            </div>}
+            )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -220,11 +225,13 @@ export function BusinessInfoEditCard() {
                     <SelectValue placeholder="Selecione" />
                   </SelectTrigger>
                   <SelectContent>
-                    {targetAudiences.filter(audience => audience.id).map((audience) => (
-                      <SelectItem key={audience.id} value={audience.id}>
-                        {audience.name}
-                      </SelectItem>
-                    ))}
+                    {targetAudiences
+                      .filter((audience) => audience.id)
+                      .map((audience) => (
+                        <SelectItem key={audience.id} value={audience.id}>
+                          {audience.name}
+                        </SelectItem>
+                      ))}
                   </SelectContent>
                 </Select>
               </div>
@@ -237,8 +244,8 @@ export function BusinessInfoEditCard() {
                   min={0}
                   step={100}
                   placeholder="Ex: 5000"
-                  value={business.budget || 0}
-                  onChange={(e) => handleInputChange("budget", Number(e.target.value))}
+                  value={business.budget || ""}
+                  onChange={(e) => handleInputChange("budget", e.target.valueAsNumber || 0)}
                   disabled={!isEditing}
                 />
               </div>

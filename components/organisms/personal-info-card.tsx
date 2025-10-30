@@ -61,18 +61,6 @@ export function PersonalInfoCard() {
         <CardDescription>Suas informações pessoais e de contato</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="flex items-center gap-4">
-          <Avatar className="h-16 w-16">
-            <AvatarImage src={userData.avatar || "/placeholder.svg"} alt={userData.name} />
-            <AvatarFallback>JS</AvatarFallback>
-          </Avatar>
-          {isEditing && (
-            <Button variant="outline" size="sm">
-              Alterar Foto
-            </Button>
-          )}
-        </div>
-
         <div className="space-y-3">
           <div>
             <Label htmlFor="name">Nome Completo</Label>

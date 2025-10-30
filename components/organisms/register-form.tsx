@@ -326,8 +326,8 @@ export function RegisterForm() {
                     min={0}
                     step={100}
                     placeholder="Ex: 5000"
-                    value={formData.business.budget}
-                    onChange={(e) => handleInputChange("business", "budget", Number(e.target.value))}
+                    value={formData.business.budget || ""}
+                    onChange={(e) => handleInputChange("business", "budget", e.target.valueAsNumber || 0)}
                     required
                   />
                 </div>

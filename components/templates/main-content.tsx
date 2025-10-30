@@ -24,8 +24,7 @@ function MainContentLoading() {
           </div>
           <Skeleton className="h-10 w-40" />
         </div>
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-          <Skeleton className="h-32" />
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           <Skeleton className="h-32" />
           <Skeleton className="h-32" />
           <Skeleton className="h-32" />

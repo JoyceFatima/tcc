@@ -62,7 +62,6 @@ export function useExcelDownloader({
       const statsData = [
         ["Métrica", "Valor"],
         ["Score de Localização", dashboardData.stats.locationScore / 100],
-        ["Fluxo Diário de Pessoas", dashboardData.stats.dailyFootfall],
         ["Compatibilidade com Público-Alvo", dashboardData.stats.targetAudienceCompatibility / 100],
         ["Concorrentes Próximos (500m)", dashboardData.stats.competitors],
       ]
