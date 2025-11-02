@@ -1,16 +1,20 @@
-"use client"
-import { useDashboard } from "@/contexts/dashboard"
-import { useExcelDownloader } from "@/hooks/useExcelDownloader"
-import { useBusiness } from "@/contexts/business"
-import { Header } from "@/components/organisms/header"
-import { StatsCards } from "@/components/organisms/stats-cards"
-import { LocationAnalysisChart } from "@/components/molecules/location-analysis-chart"
-import { InsightsCard } from "@/components/molecules/insights-card"
-import { BusinessInfoCard } from "@/components/molecules/business-info-card"
-import { Button } from "@/components/ui/button"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
-import { Skeleton } from "@/components/ui/skeleton"
-import { Download } from "lucide-react"
+"use client";
+import { useDashboard } from "@/contexts/dashboard";
+import { useExcelDownloader } from "@/hooks/useExcelDownloader";
+import { useBusiness } from "@/contexts/business";
+import { Header } from "@/components/organisms/header";
+import { StatsCards } from "@/components/organisms/stats-cards";
+import { LocationAnalysisChart } from "@/components/molecules/location-analysis-chart";
+import { InsightsCard } from "@/components/molecules/insights-card";
+import { BusinessInfoCard } from "@/components/molecules/business-info-card";
+import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Download, History } from "lucide-react";
+import { useDashboardHistory } from "@/hooks/useDashboardHistory";
+import { HistoryModal, HistoryDetailsModal } from "@/components/organisms/historic-modal";
+import { useState, useEffect } from "react";
+import { IDashboard } from "@/services/dashboard/interface";
 
 function MainContentLoading() {
   return (
@@ -48,7 +52,31 @@ export function MainContent() {
     // Passando as listas para o hook
     businessTypes,
     targetAudiences,
-  })
+  });
+
+  const { history, isLoading: isHistoryLoading, fetchHistory } = useDashboardHistory();
+  const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
+  const [selectedDashboard, setSelectedDashboard] = useState<IDashboard | null>(null);
+
+  useEffect(() => {
+    if (isHistoryModalOpen) {
+      fetchHistory();
+    }
+  }, [isHistoryModalOpen, fetchHistory]);
+
+  const openHistoryModal = () => setIsHistoryModalOpen(true);
+  const closeHistoryModal = () => setIsHistoryModalOpen(false);
+
+  const openDetailsModal = (dashboard: IDashboard) => {
+    setSelectedDashboard(dashboard);
+    setIsDetailsModalOpen(true);
+  };
+
+  const closeDetailsModal = () => {
+    setSelectedDashboard(null);
+    setIsDetailsModalOpen(false);
+  };
 
   if (isLoading) {
     return <MainContentLoading />
@@ -71,6 +99,10 @@ export function MainContent() {
             <Button onClick={downloadExcel} disabled={!dashboard || isDownloading} variant="outline">
               <Download className="mr-2 h-4 w-4" />
               {isDownloading ? "Baixando..." : "Baixar Excel"}
+            </Button>
+            <Button onClick={openHistoryModal} variant="outline">
+              <History className="mr-2 h-4 w-4" />
+              Histórico
             </Button>
             <TooltipProvider>
               <Tooltip>
@@ -102,6 +134,23 @@ export function MainContent() {
           </>
         )}
       </main>
+
+      <HistoryModal
+        history={history}
+        onDashboardClick={openDetailsModal}
+        isOpen={isHistoryModalOpen}
+        onClose={closeHistoryModal}
+        isLoading={isHistoryLoading}
+      />
+
+      {selectedDashboard && (
+        <HistoryDetailsModal
+          dashboard={selectedDashboard}
+          business={business}
+          isOpen={isDetailsModalOpen}
+          onClose={closeDetailsModal}
+        />
+      )}
     </div>
   )
 }
