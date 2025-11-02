@@ -14,5 +14,6 @@ export interface IBusiness {
   description: string
   address: IAddress | string;
   targetAudienceId: string
+  targetAudienceName?: string
   budget: number
 }

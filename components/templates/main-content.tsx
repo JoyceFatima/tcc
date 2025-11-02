@@ -88,7 +88,7 @@ export function MainContent() {
     <div className="flex flex-1 flex-col">
       <Header />
       <main id="dashboard-content" className="flex-1 space-y-6 p-6">
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col lg:flex-row justify-between gap-2">
           <div className="space-y-2">
             <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
             <p className="text-muted-foreground">
@@ -146,7 +146,6 @@ export function MainContent() {
       {selectedDashboard && (
         <HistoryDetailsModal
           dashboard={selectedDashboard}
-          business={business}
           isOpen={isDetailsModalOpen}
           onClose={closeDetailsModal}
         />

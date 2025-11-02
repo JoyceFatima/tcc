@@ -3,7 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { MapPin, Store, Target } from "lucide-react"
 
-export function BusinessInfoCard({ businessData }) {
+export function BusinessInfoCard({ businessData }: any) {
   if (!businessData) {
     return (
       <Card>
@@ -20,7 +20,9 @@ export function BusinessInfoCard({ businessData }) {
     );
   }
 
-  const { name, type, address, targetAudience } = businessData;
+  const { name, type, address, targetAudience, targetAudienceName } = businessData;
+
+  const audience = targetAudienceName || targetAudience;
 
   const formattedAddress = typeof address === 'object' && address !== null
     ? `${address.street}, ${address.number} - ${address.neighborhood}, ${address.city} - ${address.state}, ${address.cep}`
@@ -54,7 +56,7 @@ export function BusinessInfoCard({ businessData }) {
           <Target className="h-4 w-4 mt-1 text-muted-foreground" />
           <div>
             <p className="text-sm">
-              <span className="font-medium">Público-alvo:</span> {targetAudience}
+              <span className="font-medium">Público-alvo:</span> {audience}
             </p>
           </div>
         </div>

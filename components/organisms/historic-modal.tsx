@@ -1,25 +1,26 @@
-"use client";
+"use client"
 
-import { IDashboard } from "@/services/dashboard/interface";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { StatsCards } from "./stats-cards";
-import { LocationAnalysisChart } from "../molecules/location-analysis-chart";
-import { InsightsCard } from "../molecules/insights-card";
-import { BusinessInfoCard } from "../molecules/business-info-card";
+import { IDashboard } from "@/services/dashboard/interface"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { StatsCards } from "./stats-cards"
+import { LocationAnalysisChart } from "../molecules/location-analysis-chart"
+import { InsightsCard } from "../molecules/insights-card"
+import { BusinessInfoCard } from "../molecules/business-info-card"
 
-import { IBusiness } from "@/services/business/interface";
+import { IBusiness } from "@/services/business/interface"
 
 interface HistoryDetailsModalProps {
-  dashboard: IDashboard;
-  business: IBusiness | null;
-  isOpen: boolean;
-  onClose: () => void;
+  dashboard: IDashboard
+  isOpen: boolean
+  onClose: () => void
 }
 
-export function HistoryDetailsModal({ dashboard, business, isOpen, onClose }: HistoryDetailsModalProps) {
+export function HistoryDetailsModal({ dashboard, isOpen, onClose }: HistoryDetailsModalProps) {
+  const { business } = useBusiness()
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Detalhes do Histórico</DialogTitle>
         </DialogHeader>
@@ -29,21 +30,22 @@ export function HistoryDetailsModal({ dashboard, business, isOpen, onClose }: Hi
             <LocationAnalysisChart locationAnalysis={dashboard.locationAnalysis} />
             <InsightsCard insights={dashboard.insights} />
           </div>
-          {business && <BusinessInfoCard businessData={business} />}
+          <BusinessInfoCard businessData={business} />
         </div>
       </DialogContent>
     </Dialog>
-  );
+  )
 }
 
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "@/components/ui/skeleton"
+import { useBusiness } from "@/contexts/business"
 
 interface HistoryModalProps {
-  history: IDashboard[];
-  onDashboardClick: (dashboard: IDashboard) => void;
-  isOpen: boolean;
-  onClose: () => void;
-  isLoading: boolean;
+  history: IDashboard[]
+  onDashboardClick: (dashboard: IDashboard) => void
+  isOpen: boolean
+  onClose: () => void
+  isLoading: boolean
 }
 
 export function HistoryModal({ history, onDashboardClick, isOpen, onClose, isLoading }: HistoryModalProps) {
@@ -64,8 +66,11 @@ export function HistoryModal({ history, onDashboardClick, isOpen, onClose, isLoa
             <p className="text-center text-gray-500">Nenhum histórico encontrado.</p>
           ) : (
             history.map((dashboard, index) => (
-              <div key={index} className="border p-4 rounded-md cursor-pointer hover:bg-gray-100"
-                   onClick={() => onDashboardClick(dashboard)}>
+              <div
+                key={index}
+                className="border p-4 rounded-md cursor-pointer hover:bg-gray-100"
+                onClick={() => onDashboardClick(dashboard)}
+              >
                 <p>Análise {index + 1}</p>
               </div>
             ))
@@ -73,5 +78,5 @@ export function HistoryModal({ history, onDashboardClick, isOpen, onClose, isLoa
         </div>
       </DialogContent>
     </Dialog>
-  );
+  )
 }
