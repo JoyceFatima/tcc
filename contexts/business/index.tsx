@@ -69,9 +69,6 @@ const BusinessProvider = ({ children }: { children: ReactNode }) => {
         const targetAudience = targetAudienceResult.find(
           (ta) => ta.id === businessData.targetAudienceId
         );
-        if (targetAudience) {
-          businessData.targetAudienceName = targetAudience.name;
-        }
       } else {
         // Initialize with empty address if no business data
         setBusiness({ address: emptyAddress } as IBusiness);
