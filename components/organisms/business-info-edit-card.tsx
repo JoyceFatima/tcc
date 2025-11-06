@@ -80,7 +80,13 @@ export function BusinessInfoEditCard() {
     if (!business) return
 
     try {
-      await updateBusiness(business)
+      const address = business.address as IAddress
+      const formattedAddress = `${address.street}, ${address.number} - ${address.neighborhood}, ${address.city} - ${address.state}, ${address.cep}`
+      
+      await updateBusiness({
+        ...business,
+        address: formattedAddress
+      })
       setIsEditing(false)
     } catch (error) {
       // O toast de erro já é tratado no contexto

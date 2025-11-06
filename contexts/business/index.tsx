@@ -26,7 +26,7 @@ const emptyAddress: IAddress = {
 const parseAddress = (addressString: string): IAddress => {
   if (!addressString) return emptyAddress;
 
-  const parts = addressString.match(/(.+), (\d+) - (.+), (.+) - (.+), (\d{8})/);
+  const parts = addressString.match(/(.+), (.+) - (.+), (.+) - (.+), (.+)/);
   if (parts) {
     return {
       street: parts[1] || '',
@@ -96,12 +96,17 @@ const BusinessProvider = ({ children }: { children: ReactNode }) => {
 
     setIsSaving(true)
     try {
-      const { street, number, neighborhood, city, state, cep } = updatedBusiness.address as IAddress;
-      const fullAddress = `${street}, ${number} - ${neighborhood}, ${city} - ${state}, ${cep}`;
-      const businessToSave = { ...updatedBusiness, address: fullAddress };
-
-      await businessService.update(businessToSave.id, businessToSave)
-      setOriginalBusiness(updatedBusiness)
+      await businessService.update(updatedBusiness.id, updatedBusiness)
+      
+      // Parse the address back to IAddress format for local state
+      const businessWithParsedAddress = {
+        ...updatedBusiness,
+        address: typeof updatedBusiness.address === 'string' 
+          ? parseAddress(updatedBusiness.address) 
+          : updatedBusiness.address
+      }
+      
+      setOriginalBusiness(businessWithParsedAddress)
       toast.success("Informações do negócio salvas com sucesso!")
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Ocorreu um erro desconhecido.")

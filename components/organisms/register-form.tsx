@@ -135,7 +135,16 @@ export function RegisterForm() {
     setError(null)
 
     try {
-      await register(formData)
+      const address = formData.business.address as IAddress
+      const formattedAddress = `${address.street}, ${address.number} - ${address.neighborhood}, ${address.city} - ${address.state}, ${address.cep}`
+      
+      await register({
+        ...formData,
+        business: {
+          ...formData.business,
+          address: formattedAddress
+        }
+      })
       push("/dashboard")
     } catch (err) {
       console.error("Erro no registro:", err)
