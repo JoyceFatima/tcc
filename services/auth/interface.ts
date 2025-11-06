@@ -9,6 +9,7 @@ Este arquivo define as interfaces TypeScript para as estruturas de dados usadas 
 - `IRegister`: É a interface principal para o processo de registro, combinando partes opcionais das interfaces `User` (incluindo a senha) e `Business`. Isso permite que o sistema crie um novo usuário e associe-o a um negócio em uma única operação.
 */
 
+import { IAddress } from "../business/interface"
 import { IRole } from "../roles/interface"
 
 export interface UserRole {
@@ -41,7 +42,7 @@ export interface Business {
   id: string
   name: string
   description: string
-  address: string
+  address: IAddress | string
   budget: number
   businessTypeId: string
   targetAudienceId: string

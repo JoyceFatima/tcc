@@ -25,6 +25,7 @@ export function BusinessInfoEditCard() {
     updateBusiness,
   } = useBusiness()
   const [isEditing, setIsEditing] = useState(false)
+  const [isFetchingCep, setIsFetchingCep] = useState(false)
 
   const handleInputChange = (field: keyof IBusiness, value: string | number) => {
     if (!business) return
@@ -54,6 +55,7 @@ export function BusinessInfoEditCard() {
   const handleCepBlur = async (cep: string) => {
     if (cep.length !== 8) return
 
+    setIsFetchingCep(true)
     try {
       const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`)
       const data = await response.json()
@@ -69,6 +71,8 @@ export function BusinessInfoEditCard() {
       handleAddressChange("state", data.uf)
     } catch (error) {
       toast.error("Erro ao buscar CEP.")
+    } finally {
+      setIsFetchingCep(false)
     }
   }
 
@@ -170,7 +174,7 @@ export function BusinessInfoEditCard() {
                     value={(business.address as any).cep}
                     onChange={(e) => handleAddressChange("cep", e.target.value)}
                     onBlur={(e) => handleCepBlur(e.target.value)}
-                    disabled={!isEditing}
+                    disabled={!isEditing || isFetchingCep}
                     maxLength={8}
                   />
                   <Input
@@ -178,7 +182,7 @@ export function BusinessInfoEditCard() {
                     placeholder="Rua"
                     value={(business.address as any).street}
                     onChange={(e) => handleAddressChange("street", e.target.value)}
-                    disabled={!isEditing}
+                    disabled={!isEditing || isFetchingCep}
                   />
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -186,14 +190,14 @@ export function BusinessInfoEditCard() {
                     placeholder="Número"
                     value={(business.address as any).number}
                     onChange={(e) => handleAddressChange("number", e.target.value)}
-                    disabled={!isEditing}
+                    disabled={!isEditing || isFetchingCep}
                   />
                   <Input
                     className="md:col-span-2"
                     placeholder="Bairro"
                     value={(business.address as any).neighborhood}
                     onChange={(e) => handleAddressChange("neighborhood", e.target.value)}
-                    disabled={!isEditing}
+                    disabled={!isEditing || isFetchingCep}
                   />
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -201,13 +205,13 @@ export function BusinessInfoEditCard() {
                     placeholder="Cidade"
                     value={(business.address as any).city}
                     onChange={(e) => handleAddressChange("city", e.target.value)}
-                    disabled={!isEditing}
+                    disabled={!isEditing || isFetchingCep}
                   />
                   <Input
                     placeholder="Estado"
                     value={(business.address as any).state}
                     onChange={(e) => handleAddressChange("state", e.target.value)}
-                    disabled={!isEditing}
+                    disabled={!isEditing || isFetchingCep}
                   />
                 </div>
               </div>

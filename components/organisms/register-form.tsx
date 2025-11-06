@@ -4,6 +4,7 @@ import type React from "react"
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { toast } from "sonner"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -20,6 +21,7 @@ import { IBusinessType } from "@/services/business-type/interface"
 import { ITargetAudience } from "@/services/target-audience/interface"
 import { targetAudienceService } from "@/services/target-audience"
 import { businessTypeService } from "@/services/business-type"
+import { IAddress } from "@/services/business/interface"
 
 export function RegisterForm() {
   const { register } = useAuth()
@@ -29,6 +31,7 @@ export function RegisterForm() {
   const [error, setError] = useState<string | null>(null)
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  const [isFetchingCep, setIsFetchingCep] = useState(false)
 
   const [businessTypes, setBusinessTypes] = useState<IBusinessType[]>([])
   const [targetAudiences, setTargetAudiences] = useState<ITargetAudience[]>([])
@@ -45,7 +48,14 @@ export function RegisterForm() {
     business: {
       name: "",
       description: "",
-      address: "",
+      address: {
+        cep: "",
+        street: "",
+        number: "",
+        neighborhood: "",
+        city: "",
+        state: "",
+      },
       budget: 0,
       businessTypeId: "",
       targetAudienceId: "",
@@ -65,6 +75,52 @@ export function RegisterForm() {
         [field]: value,
       },
     }))
+  }
+
+  const handleAddressChange = (field: keyof IAddress, value: string) => {
+    setFormData((prev) => {
+      if (!prev.business) return prev
+
+      const currentAddress =
+        typeof prev.business.address === "string"
+          ? { cep: "", street: "", number: "", neighborhood: "", city: "", state: "" }
+          : (prev.business.address as IAddress)
+
+      return {
+        ...prev,
+        business: {
+          ...prev.business,
+          address: {
+            ...currentAddress,
+            [field]: value,
+          },
+        },
+      }
+    })
+  }
+
+  const handleCepBlur = async (cep: string) => {
+    if (cep.length !== 8) return
+
+    setIsFetchingCep(true)
+    try {
+      const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`)
+      const data = await response.json()
+
+      if (data.erro) {
+        toast.error("CEP não encontrado.")
+        return
+      }
+
+      handleAddressChange("street", data.logradouro)
+      handleAddressChange("neighborhood", data.bairro)
+      handleAddressChange("city", data.localidade)
+      handleAddressChange("state", data.uf)
+    } catch (error) {
+      toast.error("Erro ao buscar CEP.")
+    } finally {
+      setIsFetchingCep(false)
+    }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -285,16 +341,56 @@ export function RegisterForm() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="address" className="flex items-center gap-2">
-                  <MapPin className="h-4 w-4" /> Endereço Completo
+                <Label className="flex items-center gap-2">
+                  <MapPin className="h-4 w-4" />
+                  Endereço
                 </Label>
-                <Input
-                  id="address"
-                  value={formData.business.address}
-                  onChange={(e) => handleInputChange("business", "address", e.target.value)}
-                  placeholder="Rua, número, bairro, cidade, estado"
-                  required
-                />
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <Input
+                    placeholder="CEP"
+                    value={((formData.business.address as IAddress) || {}).cep || ""}
+                    onChange={(e) => handleAddressChange("cep", e.target.value)}
+                    onBlur={(e) => handleCepBlur(e.target.value)}
+                    disabled={isFetchingCep}
+                    maxLength={8}
+                  />
+                  <Input
+                    className="md:col-span-2"
+                    placeholder="Rua"
+                    value={((formData.business.address as IAddress) || {}).street || ""}
+                    onChange={(e) => handleAddressChange("street", e.target.value)}
+                    disabled={isFetchingCep}
+                  />
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <Input
+                    placeholder="Número"
+                    value={((formData.business.address as IAddress) || {}).number || ""}
+                    onChange={(e) => handleAddressChange("number", e.target.value)}
+                    disabled={isFetchingCep}
+                  />
+                  <Input
+                    className="md:col-span-2"
+                    placeholder="Bairro"
+                    value={((formData.business.address as IAddress) || {}).neighborhood || ""}
+                    onChange={(e) => handleAddressChange("neighborhood", e.target.value)}
+                    disabled={isFetchingCep}
+                  />
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <Input
+                    placeholder="Cidade"
+                    value={((formData.business.address as IAddress) || {}).city || ""}
+                    onChange={(e) => handleAddressChange("city", e.target.value)}
+                    disabled={isFetchingCep}
+                  />
+                  <Input
+                    placeholder="Estado"
+                    value={((formData.business.address as IAddress) || {}).state || ""}
+                    onChange={(e) => handleAddressChange("state", e.target.value)}
+                    disabled={isFetchingCep}
+                  />
+                </div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
